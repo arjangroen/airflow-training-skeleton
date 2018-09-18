@@ -14,21 +14,20 @@ class HttpToGcsOperator(BaseOperator):
     :param gcs_path: The path of the GCS to store the result
     :type gcs_path: string
     """
-    template_fields = ('endpoint', 'gcs_path','headers')
+    template_fields = ('endpoint', 'gcs_path', 'headers')
     template_ext = ()
     ui_color = '#f4a460'
-    
-    
+   
+   
     @apply_defaults
     def __init__(self,
-                endpoint,
-                gcs_path,
-                method='GET',
-                http_conn_id='http_default',
-                gcs_conn_id='gcs_default',
-                bucket="bucketname"
-                *args,
-                **kwargs):
+                 endpoint,
+                 gcs_path,
+                 method='GET',
+                 http_conn_id='http_default',
+                 gcs_conn_id='gcs_default',
+                 bucket="bucketname",
+                 *args, **kwargs):
         super(HttpToGcsOperator, self).__init__(*args, **kwargs)
         self.http_conn_id = http_conn_id
         self.method = method

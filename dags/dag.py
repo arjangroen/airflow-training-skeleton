@@ -40,6 +40,6 @@ for currency in {'EUR', 'USD'}:
     http_conn_id="airflow-training-currency-http",
     gcs_conn_id="airflow-training-storage-bucket",
     gcs_path="currency/{{ ds }}-" + currency + ".json",
-    bucket="airflow_training_arjan"
+    bucket="airflow_training_arjan",
     dag=dag,
     )
