@@ -2,7 +2,7 @@ import datetime as dt
 
 from airflow import DAG
 from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
-import operators.HttpToGcsOperator as HttpToGcsOperator
+from custom_operators.operators import HttpToGcsOperator
 
 
 dag = DAG(
