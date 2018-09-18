@@ -3,6 +3,7 @@ import datetime as dt
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 
+
 dag = DAG(
     dag_id="my_first_dag",
     schedule_interval="30 7 * * *",
@@ -15,8 +16,10 @@ dag = DAG(
     },
 )
 
+
 def print_exec_date(**context):
     print(context["execution_date"])
+
 
 my_task = PythonOperator(
     task_id="task_name",
