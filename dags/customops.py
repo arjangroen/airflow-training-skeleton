@@ -14,7 +14,7 @@ class HttpToGcsOperator(BaseOperator):
     :param gcs_path: The path of the GCS to store the result
     :type gcs_path: string
     """
-    template_fields = ('endpoint', 'gcs_path', 'headers')
+    template_fields = ('endpoint', 'gcs_path',)
     template_ext = ()
     ui_color = '#f4a460'
 
