@@ -17,8 +17,7 @@ class HttpToGcsOperator(BaseOperator):
     template_fields = ('endpoint', 'gcs_path', 'headers')
     template_ext = ()
     ui_color = '#f4a460'
-   
-   
+
     @apply_defaults
     def __init__(self,
                  endpoint,
@@ -35,7 +34,7 @@ class HttpToGcsOperator(BaseOperator):
         self.gcs_path = gcs_path
         self.gcs_conn_id = gcs_conn_id
         self.bucket = bucket
-     
+
     def execute(self, context):
         http = HttpHook(self.method, http_conn_id=self.http_conn_id)
         self.log.info("Calling HTTP method")
@@ -43,8 +42,8 @@ class HttpToGcsOperator(BaseOperator):
         with NamedTemporaryFile() as tmp_file_handle:
             tmp_file_handle.write(response.content)
             tmp_file_handle.flush()
-            hook = GoogleCloudStorageHook(
-                google_cloud_storage_conn_id=self.gcs_conn_id,bucket=self.bucket)
+            hook = GoogleCloudStorageHook(google_cloud_storage_conn_id=self.gcs_conn_id,
+                                          bucket=self.bucket)
             hook.upload(
                 bucket="airflow-training-arjan",
                 object=self.gcs_path,
