@@ -6,7 +6,7 @@ from customops import HttpToGcsOperator
 
 
 dag = DAG(
-    dag_id="my_second_dag",
+    dag_id="my_third_dag",
     schedule_interval="30 7 * * *",
     default_args={
         "owner": "airflow",
