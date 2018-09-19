@@ -85,7 +85,7 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
 flow_to_bq = DataFlowPythonOperator(
     task_id="land_registry_prices_to_bigquery",
     dataflow_default_options={
-        "project": "gdd-airflow-training",
+        "project": "gdd-eb47dfd7557212651320890d28",
         "region": "europe-west1",
     },
     py_file="gs://airflow-training-arjan/dataflow_job.py",
@@ -96,7 +96,7 @@ gcs_to_bq = GoogleCloudStorageToBigQueryOperator(
     task_id="write_to_bq",
     bucket=BUCKET,
     source_objects=["average_prices/transfer_date={{ ds }}/*"],
-    destination_project_dataset_table="gdd-airflow-training:prices.land_registry_price${{ ds_nodash }}",
+    destination_project_dataset_table=PROJECT_ID + ":prices.land_registry_price${{ ds_nodash }}",
     source_format="PARQUET",
     write_disposition="WRITE_TRUNCATE",
     dag=dag,
