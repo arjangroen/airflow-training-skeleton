@@ -42,10 +42,9 @@ class HttpToGcsOperator(BaseOperator):
         with NamedTemporaryFile() as tmp_file_handle:
             tmp_file_handle.write(response.content)
             tmp_file_handle.flush()
-            hook = GoogleCloudStorageHook(google_cloud_storage_conn_id=self.gcs_conn_id,
-                                          bucket=self.bucket)
+            hook = GoogleCloudStorageHook(google_cloud_storage_conn_id=self.gcs_conn_id)
             hook.upload(
-                bucket="airflow-training-arjan",
+                bucket=self.bucket,
                 object=self.gcs_path,
                 filename=tmp_file_handle.name
             )
