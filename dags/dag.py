@@ -17,7 +17,7 @@ BUCKET = "airflow-training-arjan"
 
 
 dag = DAG(
-    dag_id="my_ninth_dag",
+    dag_id="my_tenth_dag",
     schedule_interval="30 7 * * *",
     default_args={
         "owner": "airflow",
