@@ -6,12 +6,12 @@ from customops import HttpToGcsOperator
 
 
 dag = DAG(
-    dag_id="my_third_dag",
+    dag_id="my_fourth_dag",
     schedule_interval="30 7 * * *",
     default_args={
         "owner": "airflow",
         "start_date": dt.datetime(2018, 1, 1),
-        "end_date": dt.datetime(2018, 1, 7),
+        "end_date": dt.datetime(2018, 1, 31),
         "depends_on_past": True,
         "email_on_failure": True,
         "email": "airflow_errors@myorganisation.com",
