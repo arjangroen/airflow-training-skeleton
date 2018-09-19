@@ -14,7 +14,7 @@ PROJECT_ID = "gdd-eb47dfd7557212651320890d28"
 
 
 dag = DAG(
-    dag_id="my_eight_dag",
+    dag_id="my_ninth_dag",
     schedule_interval="30 7 * * *",
     default_args={
         "owner": "airflow",
