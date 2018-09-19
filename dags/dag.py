@@ -3,7 +3,7 @@ import datetime as dt
 from airflow import DAG
 from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 from airflow.utils.trigger_rule import TriggerRule
-from airflow.operators.dataflow_operator import DataFlowPythonOperator
+from airflow.contrib.operators.dataflow_operator import DataFlowPythonOperator
 from godatadriven.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 from airflow.contrib.operators.dataproc_operator import (
     DataprocClusterCreateOperator,
