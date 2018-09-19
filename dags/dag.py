@@ -60,9 +60,7 @@ for currency in {'EUR', 'USD'}:
         gcs_path="currency/{{ ds }}-" + currency + ".json",
         bucket="airflow-training-arjan",
         dag=dag,
-    ) 
-    https_to_gcs >> dataproc_create_cluster
-
+    ) >> dataproc_create_cluster
 
 
 compute_aggregates = DataProcPySparkOperator(
