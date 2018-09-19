@@ -2,6 +2,7 @@ import datetime as dt
 
 from airflow import DAG
 from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
+from airflow.utils.trigger_rule import TriggerRule
 from airflow.contrib.operators.dataproc_operator import (
     DataprocClusterCreateOperator,
     DataprocClusterDeleteOperator,
@@ -39,18 +40,6 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     dag=dag,
 )
 
-for currency in {'EUR', 'USD'}:
-    HttpToGcsOperator(
-        task_id="get_currency_" + currency,
-        method="GET",
-        endpoint="/airflow-training-transform-valutas?date={{ ds }}&from=GBP&to=" + currency,
-        http_conn_id="airflow-training-currency-http",
-        gcs_conn_id="airflow-training-storage-bucket",
-        gcs_path="currency/{{ ds }}-" + currency + ".json",
-        bucket="airflow-training-arjan",
-        dag=dag,
-    )
-
 dataproc_create_cluster = DataprocClusterCreateOperator(
     task_id="create_dataproc",
     cluster_name="analyse-pricing-{{ ds }}",
@@ -60,6 +49,21 @@ dataproc_create_cluster = DataprocClusterCreateOperator(
     dag=dag,
     auto_delete_ttl=5 * 60,  # Autodelete after 5 minutes
 )
+
+for currency in {'EUR', 'USD'}:
+    https_to_gcs = HttpToGcsOperator(
+        task_id="get_currency_" + currency,
+        method="GET",
+        endpoint="/airflow-training-transform-valutas?date={{ ds }}&from=GBP&to=" + currency,
+        http_conn_id="airflow-training-currency-http",
+        gcs_conn_id="airflow-training-storage-bucket",
+        gcs_path="currency/{{ ds }}-" + currency + ".json",
+        bucket="airflow-training-arjan",
+        dag=dag,
+    ) 
+    https_to_gcs >> dataproc_create_cluster
+
+
 
 compute_aggregates = DataProcPySparkOperator(
     task_id='compute_aggregates',
@@ -74,7 +78,9 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     cluster_name="analyse-pricing-{{ ds }}",
     dag=dag,
     project_id=PROJECT_ID,
+    trigger_rule=TriggerRule.ALL_DONE,
 )
 
+pgsl_to_gcs >> dataproc_create_cluster
 dataproc_create_cluster >> compute_aggregates
 compute_aggregates >> dataproc_delete_cluster
