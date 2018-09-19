@@ -3,10 +3,11 @@ import datetime as dt
 from airflow import DAG
 from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 from customops import HttpToGcsOperator
+PROJECT_ID="gdd-eb47dfd7557212651320890d28"
 
 
 dag = DAG(
-    dag_id="my_sixth_dag",
+    dag_id="my_seventh_dag",
     schedule_interval="30 7 * * *",
     default_args={
         "owner": "airflow",
@@ -43,3 +44,29 @@ for currency in {'EUR', 'USD'}:
         bucket="airflow-training-arjan",
         dag=dag,
     )
+    
+dataproc_create_cluster = DataprocClusterCreateOperator(
+    task_id="create_dataproc",
+    cluster_name="analyse-pricing-{{ ds }}",
+    project_id=PROJECT_ID,
+    num_workers=2,
+    zone="europe-west4-a",
+    dag=dag,
+    auto_delete_ttl=5 * 60,  # Autodelete after 5 minutes
+)
+
+compute_aggregates = DataProcPySparkOperator(
+    task_id='compute_aggregates',
+    main='gs://airflow-training-arjan/build_statistics.py',
+    cluster_name='analyse-pricing-{{ ds }}',
+    arguments=["{{ ds }}"],
+    dag=dag,
+)
+
+dataproc_delete_cluster = DataprocClusterDeleteOperator(
+    task_id="delete_dataproc",
+    cluster_name="analyse-pricing-{{ ds }}",
+    dag=dag,
+    project_id=PROJECT_ID,
+)
+
