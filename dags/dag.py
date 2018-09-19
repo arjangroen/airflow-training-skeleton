@@ -17,7 +17,7 @@ BUCKET = "airflow-training-arjan"
 
 
 dag = DAG(
-    dag_id="my_tenth_dag",
+    dag_id="my_eleventh_dag",
     schedule_interval="30 7 * * *",
     default_args={
         "owner": "airflow",
@@ -95,7 +95,7 @@ flow_to_bq = DataFlowPythonOperator(
 gcs_to_bq = GoogleCloudStorageToBigQueryOperator(
     task_id="write_to_bq",
     bucket=BUCKET,
-    source_objects=["average_prices/transfer_date={{ ds }}/*"],
+    source_objects=["average_prices/transfer_date={{ ds }}/*.parquet"],
     destination_project_dataset_table=PROJECT_ID + ":prices.land_registry_price${{ ds_nodash }}",
     source_format="PARQUET",
     write_disposition="WRITE_TRUNCATE",
