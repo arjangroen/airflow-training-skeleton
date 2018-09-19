@@ -3,13 +3,13 @@ import datetime as dt
 from airflow import DAG
 from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 from airflow.contrib.operators.dataproc_operator import (
-    DataprocClusterCreateOperator, 
     DataprocClusterCreateOperator,
-    DataprocPySparkOperator,
+    DataprocClusterDeleteOperator,
+    DataProcPySparkOperator,
 )
 
 from customops import HttpToGcsOperator
-PROJECT_ID="gdd-eb47dfd7557212651320890d28"
+PROJECT_ID = "gdd-eb47dfd7557212651320890d28"
 
 
 dag = DAG(
@@ -75,4 +75,3 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     dag=dag,
     project_id=PROJECT_ID,
 )
-
