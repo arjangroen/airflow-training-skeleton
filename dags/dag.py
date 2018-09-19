@@ -75,3 +75,6 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     dag=dag,
     project_id=PROJECT_ID,
 )
+
+dataproc_create_cluster >> compute_aggregates
+compute_aggregates >> dataproc_delete_cluster
