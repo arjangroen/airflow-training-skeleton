@@ -2,6 +2,12 @@ import datetime as dt
 
 from airflow import DAG
 from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
+from airflow.contrib.operators.dataproc_operator import (
+    DataprocClusterCreateOperator, 
+    DataprocClusterCreateOperator,
+    DataprocPySparkOperator,
+)
+
 from customops import HttpToGcsOperator
 PROJECT_ID="gdd-eb47dfd7557212651320890d28"
 
@@ -44,7 +50,7 @@ for currency in {'EUR', 'USD'}:
         bucket="airflow-training-arjan",
         dag=dag,
     )
-    
+
 dataproc_create_cluster = DataprocClusterCreateOperator(
     task_id="create_dataproc",
     cluster_name="analyse-pricing-{{ ds }}",
